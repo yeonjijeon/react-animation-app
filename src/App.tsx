@@ -86,6 +86,7 @@ const Box = styled(motion.div)`
 const boxVariants: Variants = {
   hover: { scale: 1.5, rotateZ: 90 },
   click: { scale: 1, borderRadius: '100px' },
+  drag: { backgroundColor: 'rgb(46, 204, 113)', transition: { duration: 10 } },
 }
 
 function App() {
@@ -94,8 +95,10 @@ function App() {
       <GlobalStyle />
       <Wrapper>
         <Box
+          drag
           variants={boxVariants}
           whileHover="hover" // 마우스 올렸을 때
+          whileDrag="drag" // 드래그 할 때
           whileTap="click" // 마우스 클릭했을 때
         ></Box>
       </Wrapper>
