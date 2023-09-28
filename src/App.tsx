@@ -1,7 +1,12 @@
-import React, { useRef } from 'react'
 import styled from 'styled-components'
 import { createGlobalStyle } from 'styled-components'
-import { motion, Variants } from 'framer-motion'
+import {
+  motion,
+  useMotionValue,
+  useTransform,
+  useViewportScroll,
+  Variants,
+} from 'framer-motion'
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -60,7 +65,7 @@ body {
   font-family: 'Source Sans Pro', sans-serif;
   color:black;
   line-height: 1.2;
-  background:linear-gradient(135deg,#e09,#d0e);
+  
 }
 a {
   text-decoration:none;
@@ -68,12 +73,13 @@ a {
 }
 `
 
-const Wrapper = styled.div`
-  height: 100vh;
+const Wrapper = styled(motion.div)`
+  height: 500vh;
   width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
+  /* background: linear-gradient(135deg, rgb(238, 0, 153), rgb(221, 0, 238)); */
 `
 
 const Box = styled(motion.div)`
@@ -88,35 +94,25 @@ const boxVariants: Variants = {
   click: { borderRadius: '100px' },
 }
 
-const BiggerBox = styled.div`
-  width: 600px;
-  height: 600px;
-  background-color: rgba(255, 255, 255, 0.4);
-  border-radius: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-`
-
 function App() {
-  const biggerBoxRef = useRef<HTMLDivElement>(null)
+  const x = useMotionValue(0)
+  const rotateZ = useTransform(x, [-800, 800], [-360, 360])
+  const gradient = useTransform(
+    x,
+    [-800, 800],
+    [
+      'linear-gradient(135deg, rgb(0, 210, 238), rgb(0, 83, 238))',
+      'linear-gradient(135deg, rgb(0, 238, 155), rgb(238, 178, 0))',
+    ]
+  )
+  const { scrollYProgress } = useViewportScroll()
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 5])
+
   return (
     <>
       <GlobalStyle />
-      <Wrapper>
-        <BiggerBox ref={biggerBoxRef}>
-          <Box
-            drag
-            dragSnapToOrigin
-            dragElastic={0.5}
-            dragConstraints={biggerBoxRef}
-            variants={boxVariants}
-            whileHover="hover" // 마우스 올렸을 때
-            whileDrag="drag" // 드래그 할 때
-            whileTap="click" // 마우스 클릭했을 때
-          ></Box>
-        </BiggerBox>
+      <Wrapper style={{ background: gradient }}>
+        <Box style={{ x, rotateZ, scale }} drag="x" dragSnapToOrigin />
       </Wrapper>
     </>
   )
