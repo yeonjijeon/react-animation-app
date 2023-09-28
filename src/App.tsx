@@ -106,7 +106,20 @@ const boxVariants: Variants = {
       type: 'spring',
       duration: 0.5,
       bounce: 0.5,
+      delayChildren: 0.5,
+      staggerChildren: 0.1,
     },
+  },
+}
+
+const circleVariants: Variants = {
+  start: {
+    opacity: 0,
+    y: 10, // 아래에서 올라옴
+  },
+  end: {
+    opacity: 1,
+    y: 0,
   },
 }
 
@@ -116,10 +129,10 @@ function App() {
       <GlobalStyle />
       <Wrapper>
         <Box variants={boxVariants} initial="start" animate="end">
-          <Circle />
-          <Circle />
-          <Circle />
-          <Circle />
+          <Circle variants={circleVariants} />
+          <Circle variants={circleVariants} />
+          <Circle variants={circleVariants} />
+          <Circle variants={circleVariants} />
         </Box>
       </Wrapper>
     </>
